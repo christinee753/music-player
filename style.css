@@ -7,8 +7,9 @@ body {
     flex-direction: column;
     align-items: center;
     justify-content: center;
+}
 
-    .music-container {
+.music-container {
     background-color: white;
     border-radius: 10px;
     padding: 30px;
@@ -25,7 +26,7 @@ body {
 
 .navigation button {
     border: none;
-    background-color: rgb(224, 224, 224);
+    background-color: #e0e0e0;
     font-size: 18px;
     padding: 10px;
     margin: 10px;
@@ -65,7 +66,7 @@ body {
     }
 
     50% {
-        transform: scale(1.08);
+        transform: scale(1.15);
     }
 
     100% {
@@ -73,8 +74,7 @@ body {
     }
 }
 
-.spinning {
-    animation: pulse 1.5s ease-in-out infinite;
-}
-
+.img-container img.pulsing {
+    animation: pulse 2s ease-in-out infinite;
+    transform-origin: center;
 }

@@ -7,8 +7,6 @@ const progress = document.querySelector(".progress");
 const currentTime = document.getElementById("current-time");
 const duration = document.getElementById("duration");
 const cover = document.getElementById("cover");
-let coverAnimation;
-
 
 const songs = [
     "Once In A While I Dream - Tama Shutts.mp3",
@@ -24,6 +22,10 @@ function formatTime(time) {
     return minutes + ":" + (seconds < 10 ? "0" : "") + seconds;
 }
 
+function loadSong(song) {
+    audio.src = `music/${song}`;
+    title.innerText = song.replace(".mp3", "");
+}
 
 audio.addEventListener("loadedmetadata", function() {
     duration.innerText = formatTime(audio.duration);
@@ -34,31 +36,13 @@ loadSong(songs[songIndex]);
 function playSong() {
     audio.play();
     playBtn.innerText = "Pause";
-
-    if (coverAnimation) {
-        coverAnimation.play();
-    } else {
-        coverAnimation = cover.animate(
-            [
-                { transform: "scale(1)" },
-                { transform: "scale(1.08)" },
-                { transform: "scale(1)" }
-            ],
-            {
-                duration: 1500,
-                iterations: Infinity
-            }
-        );
-    }
+    cover.classList.add("pulsing");
 }
 
 function pauseSong() {
     audio.pause();
     playBtn.innerText = "Play";
-
-    if (coverAnimation) {
-        coverAnimation.pause();
-    }
+    cover.classList.remove("pulsing");
 }
 
 playBtn.addEventListener("click", function() {
@@ -67,17 +51,18 @@ playBtn.addEventListener("click", function() {
     } else {
         pauseSong();
     }
+});
 
-   nextBtn.addEventListener("click", function() {
+nextBtn.addEventListener("click", function() {
     songIndex = songIndex + 1;
 
-        if (songIndex >= songs.length) {
+    if (songIndex >= songs.length) {
         songIndex = 0;
     }
 
     loadSong(songs[songIndex]);
     playSong();
-}); 
+});
 
 prevBtn.addEventListener("click", function() {
     songIndex = songIndex - 1;
@@ -92,14 +77,9 @@ prevBtn.addEventListener("click", function() {
 
 audio.addEventListener("timeupdate", function() {
     const progressPercent = (audio.currentTime / audio.duration) * 100;
+
     progress.style.width = progressPercent + "%";
-
     currentTime.innerText = formatTime(audio.currentTime);
-});
-
-
-audio.addEventListener("loadedmetadata", function() {
-    duration.innerText = formatTime(audio.duration);
 });
 
 const progressContainer = document.querySelector(".progress-container");
@@ -107,6 +87,7 @@ const progressContainer = document.querySelector(".progress-container");
 progressContainer.addEventListener("click", function(event) {
     const width = progressContainer.clientWidth;
     const clickPosition = event.offsetX;
+
     audio.currentTime = (clickPosition / width) * audio.duration;
 });
 
@@ -119,5 +100,4 @@ audio.addEventListener("ended", function() {
 
     loadSong(songs[songIndex]);
     playSong();
-});
 });
